@@ -5,7 +5,7 @@ This code implements the algorithm presented in [An Efficient Algorithm for Calc
 
 There are two main functions: 
 
-1. `hausdorf(np.ndarray[:,:] X, np.ndarray[:,:] Y)` and
+1. `hausdorff(np.ndarray[:,:] X, np.ndarray[:,:] Y)` and
 2. `weighted_hausdorff(np.ndarray[:,:] X, np.ndarray[:,:] Y, np.ndarray[:] w)`. 
 
 The first computes the _Hausdorff distance_ between the rows of `X` and `Y` using the Euclidean distance as metric. The second computes the _Hausdorff distance_ between the rows of `X` and `Y` using a Weighted Euclidean distance as metric (with weights `w`). 
