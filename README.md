@@ -3,6 +3,13 @@ Fast computation of Hausdorff distance in Python/Cython.
 
 This code implements the algorithm presented in [An Efficient Algorithm for Calculating the Exact Hausdorff Distance](https://publik.tuwien.ac.at/files/PubDat_247739.pdf) (_Aziz and Hanbury_).
 
+
+To install the package I provide you a `setup.py` file. You must run:
+
+```bash
+python setup.py install
+```
+
 There are two main functions: 
 
 1. `hausdorff(np.ndarray[:,:] X, np.ndarray[:,:] Y)` and
