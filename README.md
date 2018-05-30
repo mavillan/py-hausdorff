@@ -1,7 +1,7 @@
 # py-hausdorff
 Fast computation of Hausdorff distance in Python/Cython. 
 
-This code implements the algorithm presented in [An Efficient Algorithm for Calculating the Exact Hausdorff Distance](https://publik.tuwien.ac.at/files/PubDat_247739.pdf) (_Aziz and Hanbury_).
+This code implements the algorithm presented in _An Efficient Algorithm for Calculating the Exact Hausdorff Distance_ (__DOI:__ [10.1109/TPAMI.2015.2408351](https://doi.org/10.1109/TPAMI.2015.2408351)) by _Aziz and Hanbury_.
 
 
 To install the package I provide you a `setup.py` file. You must run:
