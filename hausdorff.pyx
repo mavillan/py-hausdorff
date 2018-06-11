@@ -6,101 +6,112 @@
 
 import numpy as np
 cimport numpy as cnp
-from numpy.math cimport INFINITY
-from libc.math cimport sqrt
+from numpy.math cimport INFINITY as INF
+from libc.math cimport abs,sqrt
 
-
-ctypedef cnp.float64_t float64_t
 ctypedef cnp.ndarray ndarray
 
 
-cdef inline float64_t _metric(float64_t[::1] x, float64_t[::1] y) nogil:
+#######################################################################################
+# Defining distance functions
+#######################################################################################
+
+distances_mapping = {"manhattan":1, "euclidean":2, "chebyshev":3, "cosine":4}
+
+
+cdef inline double _manhattan(double[:] x, double[:] y):
 	cdef:
 		Py_ssize_t i
 		Py_ssize_t n = x.shape[0]
-		float64_t ret = 0.
+		double ret = 0.
+	for i in range(n):
+		ret += abs(x[i]-y[i])
+	return ret
+
+
+cdef inline double _euclidean(double[:] x, double[:] y):
+	cdef:
+		Py_ssize_t i
+		Py_ssize_t n = x.shape[0]
+		double ret = 0.
 	for i in range(n):
 		ret += (x[i]-y[i])**2
 	return sqrt(ret)
 
 
-cdef inline float64_t _weighted_metric(float64_t[::1] x, float64_t[::1] y, float64_t[::1] w) nogil:
+cdef inline double _chebyshev(double[:] x, double[:] y):
 	cdef:
 		Py_ssize_t i
 		Py_ssize_t n = x.shape[0]
-		float64_t ret = 0.
+		double ret = -1*INF
+		double d 
 	for i in range(n):
-		ret += w[i]*(x[i]-y[i])**2
-	return sqrt(ret)
+		d = abs(x[i]-y[i])
+		if d>ret: ret=d
+	return ret
 
 
-cdef inline float64_t _hausdorff(float64_t[:,::1] XA, float64_t[:,::1] XB) nogil:
+cdef inline double _cosine(double[:] x, double[:] y):
+	cdef:
+		Py_ssize_t i
+		Py_ssize_t n = x.shape[0]
+		double xydot = 0.
+		double xnorm = 0.
+		double ynorm = 0.
+	for i in range(n):
+		xydot += x[i]*y[i]
+		xnorm += x[i]*x[i]
+		ynorm += y[i]*y[i]
+	return 1.-xydot/(sqrt(xnorm)*sqrt(ynorm))
+
+
+
+
+#######################################################################################
+# Defining Hausdorff functions
+#######################################################################################
+
+
+cdef inline double _hausdorff(double[:,:] XA, double[:,:] XB, int dist):
 	cdef:
 		Py_ssize_t nA = XA.shape[0]
 		Py_ssize_t nB = XB.shape[0]
 		Py_ssize_t i, j
-		float64_t cmax = 0.
-		float64_t cmin 
-		float64_t d
+		double cmax = 0.
+		double cmin 
+		double d
 
 	for i in range(nA):
-		cmin = INFINITY
+		cmin = INF
 		for j in range(nB):
-			d = _metric(XA[i,:], XB[j,:])
+			if   dist==1: d = _manhattan(XA[i,:], XB[j,:])
+			elif dist==2: d = _euclidean(XA[i,:], XB[j,:])
+			elif dist==3: d = _chebyshev(XA[i,:], XB[j,:])
+			elif dist==4: d = _cosine(XA[i,:], XB[j,:])
+
 			if d<cmin:
 				cmin = d
 			if cmin<cmax:
 				break
-		if cmin>cmax and INFINITY>cmin:
+		if cmin>cmax and INF>cmin:
 			cmax = cmin
 	for j in range(nB):
-		cmin = INFINITY
+		cmin = INF
 		for i in range(nA):
-			d = _metric(XA[i,:], XB[j,:])
+			if   dist==1: d = _manhattan(XA[i,:], XB[j,:])
+			elif dist==2: d = _euclidean(XA[i,:], XB[j,:])
+			elif dist==3: d = _chebyshev(XA[i,:], XB[j,:])
+			elif dist==4: d = _cosine(XA[i,:], XB[j,:])
+
 			if d<cmin:
 				cmin = d
 			if cmin<cmax:
 				break
-		if cmin>cmax and INFINITY>cmin:
+		if cmin>cmax and INF>cmin:
 			cmax = cmin
 	return cmax
 
 
-cdef inline float64_t _weighted_hausdorff(float64_t[:,::1] XA, float64_t[:,::1] XB, float64_t[::1] w) nogil:
-	cdef:
-		Py_ssize_t nA = XA.shape[0]
-		Py_ssize_t nB = XB.shape[0]
-		Py_ssize_t i, j
-		float64_t cmax = 0.
-		float64_t cmin 
-		float64_t d
-
-	for i in range(nA):
-		cmin = INFINITY
-		for j in range(nB):
-			d = _weighted_metric(XA[i,:], XB[j,:], w)
-			if d<cmin:
-				cmin = d
-			if cmin<cmax:
-				break
-		if cmin>cmax and INFINITY>cmin:
-			cmax = cmin
-	for j in range(nB):
-		cmin = INFINITY
-		for i in range(nA):
-			d = _weighted_metric(XA[i,:], XB[j,:], w)
-			if d<cmin:
-				cmin = d
-			if cmin<cmax:
-				break
-		if cmin>cmax and INFINITY>cmin:
-			cmax = cmin
-	return cmax
-
-
-def hausdorff(float64_t[:,::1] XA not None, float64_t[:,::1] XB not None):
-	return _hausdorff(XA, XB)
-
-
-def weighted_hausdorff(XA not None, XB not None, w not None):
-	return _weighted_hausdorff(XA, XB, w)
+def hausdorff(double[:,:] XA not None, double[:,:] XB not None, distance="euclidean"):
+	assert distance in distances_mapping, "distance must be one of the following: " + " ".join(distances_mapping.keys())	
+	return _hausdorff(XA, XB, distances_mapping[distance])
