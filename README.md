@@ -20,7 +20,7 @@ __Note:__ I will add more distances in the near future. If you need any distance
 
 ```python
 import numpy as np
-from hausdorff import hausdorff, weighted_hausdorff
+from hausdorff import hausdorff
 
 # two random 2D arrays (second dimension must match)
 np.random.seed(0)
