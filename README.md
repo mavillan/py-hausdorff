@@ -10,24 +10,27 @@ To install the package I provide you a `setup.py` file. You must run:
 python setup.py install
 ```
 
-There are two main functions: 
+The main functions is: 
 
-1. `hausdorff(np.ndarray[:,:] X, np.ndarray[:,:] Y)` and
-2. `weighted_hausdorff(np.ndarray[:,:] X, np.ndarray[:,:] Y, np.ndarray[:] w)`. 
+`hausdorff(np.ndarray[:,:] X, np.ndarray[:,:] Y)`
 
-The first computes the _Hausdorff distance_ between the rows of `X` and `Y` using the Euclidean distance as metric. The second computes the _Hausdorff distance_ between the rows of `X` and `Y` using a Weighted Euclidean distance as metric (with weights `w`). 
+Which computes the _Hausdorff distance_ between the rows of `X` and `Y` using the Euclidean distance as metric. It receives the optional argument `distance` (string), which is the distance function used to compute the distance between the rows of `X` and `Y`. It could be any of the following: `manhattan`, `euclidean` (default), `chebyshev` and `cosine`.
+
+__Note:__ I will add more distances in the near future. If you need any distance in particular raise an issue. 
 
 ```python
 import numpy as np
 from hausdorff import hausdorff, weighted_hausdorff
 
 # two random 2D arrays (second dimension must match)
+np.random.seed(0)
 X = np.random.random((1000,100))
 Y = np.random.random((5000,100))
 
-# 1D weights array
-w = np.random.random(100)
+# Test computation of Hausdorff distance with different base distances
+print("Hausdorff distance test: {0}".format( hausdorff(X, Y, distance="manhattan") ))
+print("Hausdorff distance test: {0}".format( hausdorff(X, Y, distance="euclidean") ))
+print("Hausdorff distance test: {0}".format( hausdorff(X, Y, distance="chebyshev") ))
+print("Hausdorff distance test: {0}".format( hausdorff(X, Y, distance="cosine") ))
 
-print("Hausdorff distance test: {0}".format(hausdorff(X, Y)))
-print("Weighted Hausdorff distance test: {0}".format(weighted_hausdorff(X, Y, w)))
 ```
