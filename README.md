@@ -16,7 +16,7 @@ The main functions is:
 
 Which computes the _Hausdorff distance_ between the rows of `X` and `Y` using the Euclidean distance as metric. It receives the optional argument `distance` (string), which is the distance function used to compute the distance between the rows of `X` and `Y`. It could be any of the following: `manhattan`, `euclidean` (default), `chebyshev` and `cosine`.
 
-__Note:__ I will add more distances in the near future. If you need any distance in particular raise an issue. 
+__Note:__ I will add more distances in the near future. If you need any distance in particular, open an issue. 
 
 ```python
 import numpy as np
