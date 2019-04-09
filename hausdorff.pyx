@@ -7,7 +7,7 @@
 import numpy as np
 cimport numpy as cnp
 from numpy.math cimport INFINITY as INF
-from libc.math cimport abs,sqrt
+from libc.math cimport abs, sqrt, pow, cos, sin, asin
 
 ctypedef cnp.ndarray ndarray
 
@@ -16,7 +16,13 @@ ctypedef cnp.ndarray ndarray
 # Defining distance functions
 #######################################################################################
 
-distances_mapping = {"manhattan":1, "euclidean":2, "chebyshev":3, "cosine":4}
+distances_mapping = {
+	"manhattan": 1,
+	"euclidean": 2,
+	"chebyshev": 3,
+	"cosine": 4,
+	"haversine": 5
+}
 
 
 cdef inline double _manhattan(double[:] x, double[:] y):
@@ -65,6 +71,22 @@ cdef inline double _cosine(double[:] x, double[:] y):
 	return 1.-xydot/(sqrt(xnorm)*sqrt(ynorm))
 
 
+cdef inline double _haversine(double [:] x, double [:] y):
+	cdef:
+		double R = 6378.0
+		double radians = np.pi / 180.0
+		double lat1 = radians * x[0]
+		double lon1 = radians * x[1]
+		double lat2 = radians * y[0]
+		double lon2 = radians * y[1]
+		double dlon = lon2 - lon1
+		double dlat = lat2 - lat1
+		double a
+
+	a = (pow(sin(dlat/2.0), 2.0) + cos(lat1) *
+		cos(lat2) * pow(sin(dlon/2.0), 2.0))
+
+	return R * 2 * asin(sqrt(a))
 
 
 #######################################################################################
@@ -88,6 +110,7 @@ cdef inline double _hausdorff(double[:,:] XA, double[:,:] XB, int dist):
 			elif dist==2: d = _euclidean(XA[i,:], XB[j,:])
 			elif dist==3: d = _chebyshev(XA[i,:], XB[j,:])
 			elif dist==4: d = _cosine(XA[i,:], XB[j,:])
+			elif dist==5: d = _haversine(XA[i,:], XB[j,:])
 
 			if d<cmin:
 				cmin = d
@@ -102,6 +125,7 @@ cdef inline double _hausdorff(double[:,:] XA, double[:,:] XB, int dist):
 			elif dist==2: d = _euclidean(XA[i,:], XB[j,:])
 			elif dist==3: d = _chebyshev(XA[i,:], XB[j,:])
 			elif dist==4: d = _cosine(XA[i,:], XB[j,:])
+			elif dist==5: d = _haversine(XA[i,:], XB[j,:])
 
 			if d<cmin:
 				cmin = d
@@ -113,5 +137,8 @@ cdef inline double _hausdorff(double[:,:] XA, double[:,:] XB, int dist):
 
 
 def hausdorff(double[:,:] XA not None, double[:,:] XB not None, distance="euclidean"):
-	assert distance in distances_mapping, "distance must be one of the following: " + " ".join(distances_mapping.keys())	
+	assert distance in distances_mapping, "distance must be one of the following: " + " ".join(distances_mapping.keys())
+	if distance == 'haversine':
+		assert XA.shape[1] >= 2, 'Haversine distance requires at least 2 coordinates per point (lat, lng)'
+		assert XB.shape[1] >= 2, 'Haversine distance requires at least 2 coordinates per point (lat, lng)'
 	return _hausdorff(XA, XB, distances_mapping[distance])
