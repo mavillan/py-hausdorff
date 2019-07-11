@@ -4,10 +4,10 @@ import distances
 from inspect import getmembers
 
 def _find_available_functions(module_name):
-    all_members = getmembers(module_name)
-    available_functions = [member[0] for member in all_members 
-                           if isinstance(member[1], numba.targets.registry.CPUDispatcher)]
-    return available_functions
+	all_members = getmembers(module_name)
+	available_functions = [member[0] for member in all_members 
+						   if isinstance(member[1], numba.targets.registry.CPUDispatcher)]
+	return available_functions
 
 @numba.jit(nopython=True, fastmath=True)
 def _hausdorff(XA, XB, distance_function):
@@ -36,14 +36,14 @@ def _hausdorff(XA, XB, distance_function):
 			cmax = cmin
 	return cmax
 
-def hausdorff(XA not None, XB not None, distance="euclidean"):
-    assert distance in _find_available_functions(distances), 'Distance is not an implemented function'
-    assert type(XA) is np.ndarray and type(XB) is np.ndarray, "Arrays must be of type numpy.ndarray"
-    assert XA.ndim==2 and XB.ndim==2, "Arrays must be 2-dimensional"
-    assert XA.shape[0]==XB.shape[0], "Arrays must have equal number of rows"
-    assert XA.shape[1]==XB.shape[0], "Arrays must have equal number of columns"
+def hausdorff(XA, XB, distance="euclidean"):
+	assert distance in _find_available_functions(distances), 'Distance is not an implemented function'
+	assert type(XA) is np.ndarray and type(XB) is np.ndarray, "Arrays must be of type numpy.ndarray"
+	assert XA.ndim==2 and XB.ndim==2, "Arrays must be 2-dimensional"
+	assert XA.shape[0]==XB.shape[0], "Arrays must have equal number of rows"
+	assert XA.shape[1]==XB.shape[0], "Arrays must have equal number of columns"
 	if distance == 'haversine':
 		assert XA.shape[1] >= 2, 'Haversine distance requires at least 2 coordinates per point (lat, lng)'
 		assert XB.shape[1] >= 2, 'Haversine distance requires at least 2 coordinates per point (lat, lng)'
-    distance_function = getattr(distances, distance)
-    return _hausdorff(XA, XB, distance_function)
+	distance_function = getattr(distances, distance)
+	return _hausdorff(XA, XB, distance_function)
