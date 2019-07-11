@@ -2,12 +2,6 @@ import numba
 import numpy as np
 from math import sqrt, pow, cos, sin, asin
 
-AVAILABLE_FUNCS = ['manhattan',
-				   'euclidean',
-				   'chebyshev'
-				   'cosine',
-				   'haversine']
-
 @numba.jit(nopython=True, fastmath=True)
 def manhattan(array_x, array_y):
 	n = array_x.shape[0]
