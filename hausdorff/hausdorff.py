@@ -40,7 +40,6 @@ def hausdorff_distance(XA, XB, distance="euclidean"):
 	assert distance in _find_available_functions(distances), 'Distance is not an implemented function'
 	assert type(XA) is np.ndarray and type(XB) is np.ndarray, "Arrays must be of type numpy.ndarray"
 	assert XA.ndim==2 and XB.ndim==2, "Arrays must be 2-dimensional"
-	assert XA.shape[0]==XB.shape[0], "Arrays must have equal number of rows"
 	assert XA.shape[1]==XB.shape[0], "Arrays must have equal number of columns"
 	if distance == 'haversine':
 		assert XA.shape[1] >= 2, 'Haversine distance requires at least 2 coordinates per point (lat, lng)'
