@@ -1,6 +1,6 @@
 import numpy as np
 import numba
-import distances
+import hausdorff.distances as distances
 from inspect import getmembers
 
 def _find_available_functions(module_name):
@@ -36,7 +36,7 @@ def _hausdorff(XA, XB, distance_function):
 			cmax = cmin
 	return cmax
 
-def hausdorff(XA, XB, distance="euclidean"):
+def hausdorff_distance(XA, XB, distance="euclidean"):
 	assert distance in _find_available_functions(distances), 'Distance is not an implemented function'
 	assert type(XA) is np.ndarray and type(XB) is np.ndarray, "Arrays must be of type numpy.ndarray"
 	assert XA.ndim==2 and XB.ndim==2, "Arrays must be 2-dimensional"
