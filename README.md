@@ -6,7 +6,7 @@ This code implements the algorithm presented in _An Efficient Algorithm for Calc
 
 ## Installation
 
-Via PyPI
+Via (PyPI](https://pypi.org/project/hausdorff/):
 
 ```bash
 pip install hausdorff
