@@ -1,5 +1,5 @@
 # py-hausdorff
-Fast computation of Hausdorff distance in Python/Cython. 
+Fast computation of Hausdorff distance in Python. 
 
 This code implements the algorithm presented in _An Efficient Algorithm for Calculating the Exact Hausdorff Distance_ (__DOI:__ [10.1109/TPAMI.2015.2408351](https://doi.org/10.1109/TPAMI.2015.2408351)) by _Aziz and Hanbury_.
 
