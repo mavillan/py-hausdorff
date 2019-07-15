@@ -11,7 +11,7 @@ Via [PyPI](https://pypi.org/project/hausdorff/):
 ```bash
 pip install hausdorff
 ```
-Or you can clone and install it manually: 
+Or you can clone this repository and install it manually: 
 
 ```bash
 python setup.py install
