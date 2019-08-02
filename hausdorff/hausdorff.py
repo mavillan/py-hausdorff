@@ -36,13 +36,19 @@ def _hausdorff(XA, XB, distance_function):
 			cmax = cmin
 	return cmax
 
-def hausdorff_distance(XA, XB, distance="euclidean"):
-	assert distance in _find_available_functions(distances), 'distance is not an implemented function'
-	assert type(XA) is np.ndarray and type(XB) is np.ndarray, "Arrays must be of type numpy.ndarray"
-	assert XA.ndim == 2 and XB.ndim == 2, "Arrays must be 2-dimensional"
-	assert XA.shape[1] == XB.shape[1], "Arrays must have equal number of columns"
+def hausdorff_distance(XA, XB, distance='euclidean'):
+	assert distance in _find_available_functions(distances), \
+		'distance is not an implemented function'
+	assert type(XA) is np.ndarray and type(XB) is np.ndarray, \
+		'arrays must be of type numpy.ndarray'
+	assert np.issubdtype(XA.dtype, np.number) and np.issubdtype(XA.dtype, np.number), \
+		'the arrays data type must be numeric'
+	assert XA.ndim == 2 and XB.ndim == 2, \
+		'arrays must be 2-dimensional'
+	assert XA.shape[1] == XB.shape[1], \
+		'arrays must have equal number of columns'
 	if distance == 'haversine':
-		assert XA.shape[1] >= 2, 'Haversine distance requires at least 2 coordinates per point (lat, lng)'
-		assert XB.shape[1] >= 2, 'Haversine distance requires at least 2 coordinates per point (lat, lng)'
+		assert XA.shape[1] >= 2, 'haversine distance requires at least 2 coordinates per point (lat, lng)'
+		assert XB.shape[1] >= 2, 'haversine distance requires at least 2 coordinates per point (lat, lng)'
 	distance_function = getattr(distances, distance)
 	return _hausdorff(XA, XB, distance_function)
