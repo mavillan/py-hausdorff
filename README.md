@@ -1,4 +1,6 @@
 # py-hausdorff
+[![PyPI version][pypi-image]][pypi-url]  [![PyPI download][download-image]][pypi-url]
+
 Fast computation of Hausdorff distance in Python. 
 
 This code implements the algorithm presented in _An Efficient Algorithm for Calculating the Exact Hausdorff Distance_ (__DOI:__ [10.1109/TPAMI.2015.2408351](https://doi.org/10.1109/TPAMI.2015.2408351)) by _Aziz and Hanbury_.
@@ -54,3 +56,8 @@ X = rand_lat_lng(100)
 Y = rand_lat_lng(250)
 print("Hausdorff haversine test: {0}".format( hausdorff_distance(X, Y, distance="haversine") ))
 ```
+
+[pypi-image]: http://img.shields.io/pypi/v/hausdorff.svg
+[pypi-url]: https://pypi.org/project/hausdorff/
+[download-image]: http://img.shields.io/pypi/dm/hausdorff.svg
+
