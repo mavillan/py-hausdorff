@@ -6,7 +6,7 @@ from inspect import getmembers
 def _find_available_functions(module_name):
 	all_members = getmembers(module_name)
 	available_functions = [member[0] for member in all_members 
-						   if isinstance(member[1], numba.targets.registry.CPUDispatcher)]
+						   if isinstance(member[1], numba.core.registry.CPUDispatcher)]
 	return available_functions
 
 @numba.jit(nopython=True, fastmath=True)
