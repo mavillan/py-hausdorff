@@ -63,6 +63,7 @@ print("Hausdorff haversine test: {0}".format( hausdorff_distance(X, Y, distance=
 The distance function is used to calculate the distances between the rows of the input 2-dimensional arrays . For optimal performance, this custom distance function should be decorated with `@numba` in [nopython mode](https://numba.pydata.org/numba-doc/latest/user/jit.html).
 
 ```python
+import numba
 import numpy as np
 from math import sqrt
 from hausdorff import hausdorff_distance
@@ -83,7 +84,7 @@ def custom_func(array_x, array_y):
         ret += (array_x[i]-array_y[i])**2
     return sqrt(ret)
 
-print(f"Hausdorff custom euclidean test: {hausdorff_distance(XA, XB, distance=custom_dist)}")
+print(f"Hausdorff custom euclidean test: {hausdorff_distance(X, Y, distance=custom_dist)}")
 
 # a real crazy custom function
 @numba.jit(nopython=True, fastmath=True)
@@ -94,7 +95,7 @@ def custom_dist(array_x, array_y):
         ret += (array_x[i]-array_y[i])**3 / (array_x[i]**2 + array_y[i]**2 + 0.1)
     return ret
 
-print(f"Hausdorff custom crazy test: {hausdorff_distance(XA, XB, distance=custom_dist)}")
+print(f"Hausdorff custom crazy test: {hausdorff_distance(X, Y, distance=custom_dist)}")
 ```
 
 [travis-image]: https://travis-ci.org/mavillan/py-hausdorff.svg?branch=master
