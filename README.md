@@ -77,7 +77,7 @@ Y = np.random.random((5000,100))
 # this function should take two 1-dimensional arrays as input
 # and return a single float value as output.
 @numba.jit(nopython=True, fastmath=True)
-def custom_func(array_x, array_y):
+def custom_dist(array_x, array_y):
     n = array_x.shape[0]
     ret = 0.
     for i in range(n):
