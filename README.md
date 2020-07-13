@@ -42,10 +42,10 @@ X = np.random.random((1000,100))
 Y = np.random.random((5000,100))
 
 # Test computation of Hausdorff distance with different base distances
-print(f"Hausdorff distance test: {hausdorff_distance(X, Y, distance="manhattan")}")
-print(f"Hausdorff distance test: {hausdorff_distance(X, Y, distance="euclidean")}")
-print(f"Hausdorff distance test: {hausdorff_distance(X, Y, distance="chebyshev")}")
-print(f"Hausdorff distance test: {hausdorff_distance(X, Y, distance="cosine")}")
+print(f"Hausdorff distance test: {hausdorff_distance(X, Y, distance='manhattan')}")
+print(f"Hausdorff distance test: {hausdorff_distance(X, Y, distance='euclidean')}")
+print(f"Hausdorff distance test: {hausdorff_distance(X, Y, distance='chebyshev')}")
+print(f"Hausdorff distance test: {hausdorff_distance(X, Y, distance='cosine')}")
 
 # For haversine, use 2D lat, lng coordinates
 def rand_lat_lng(N):
