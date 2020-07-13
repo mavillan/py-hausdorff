@@ -1,5 +1,5 @@
 # py-hausdorff
-[![PyPI version][pypi-image]][pypi-url]  [![PyPI download][download-image]][pypi-url]
+[![Build Status][travis-image]][travis-url]  [![PyPI version][pypi-image]][pypi-url]  [![PyPI download][download-image]][pypi-url]
 
 Fast computation of Hausdorff distance in Python. 
 
@@ -56,8 +56,8 @@ X = rand_lat_lng(100)
 Y = rand_lat_lng(250)
 print("Hausdorff haversine test: {0}".format( hausdorff_distance(X, Y, distance="haversine") ))
 ```
-
+[travis-image]: https://travis-ci.org/mavillan/py-hausdorff.svg?branch=master
+[travis-url]: https://travis-ci.org/mavillan/py-hausdorff
 [pypi-image]: http://img.shields.io/pypi/v/hausdorff.svg
 [pypi-url]: https://pypi.org/project/hausdorff/
 [download-image]: http://img.shields.io/pypi/dm/hausdorff.svg
-
