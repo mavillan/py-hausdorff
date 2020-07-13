@@ -37,8 +37,6 @@ def _hausdorff(XA, XB, distance_function):
 	return cmax
 
 def hausdorff_distance(XA, XB, distance='euclidean'):
-	assert distance in _find_available_functions(distances), \
-		'distance is not an implemented function'
 	assert type(XA) is np.ndarray and type(XB) is np.ndarray, \
 		'arrays must be of type numpy.ndarray'
 	assert np.issubdtype(XA.dtype, np.number) and np.issubdtype(XA.dtype, np.number), \
@@ -47,8 +45,16 @@ def hausdorff_distance(XA, XB, distance='euclidean'):
 		'arrays must be 2-dimensional'
 	assert XA.shape[1] == XB.shape[1], \
 		'arrays must have equal number of columns'
-	if distance == 'haversine':
-		assert XA.shape[1] >= 2, 'haversine distance requires at least 2 coordinates per point (lat, lng)'
-		assert XB.shape[1] >= 2, 'haversine distance requires at least 2 coordinates per point (lat, lng)'
-	distance_function = getattr(distances, distance)
+	
+	if isinstance(distance, str):
+		assert distance in _find_available_functions(distances), \
+			'distance is not an implemented function'
+		if distance == 'haversine':
+			assert XA.shape[1] >= 2, 'haversine distance requires at least 2 coordinates per point (lat, lng)'
+			assert XB.shape[1] >= 2, 'haversine distance requires at least 2 coordinates per point (lat, lng)'
+		distance_function = getattr(distances, distance)
+	elif callable(distance):
+		distance_function = distance
+	else:
+		raise ValueError("Invalid input value for 'distance' parameter.")
 	return _hausdorff(XA, XB, distance_function)
