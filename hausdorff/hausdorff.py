@@ -37,7 +37,7 @@ def _hausdorff(XA, XB, distance_function):
 	return cmax
 
 def hausdorff_distance(XA, XB, distance='euclidean'):
-	assert type(XA) is np.ndarray and type(XB) is np.ndarray, \
+	assert isinstance(XA, np.ndarray) and isinstance(XB, np.ndarray), \
 		'arrays must be of type numpy.ndarray'
 	assert np.issubdtype(XA.dtype, np.number) and np.issubdtype(XA.dtype, np.number), \
 		'the arrays data type must be numeric'
